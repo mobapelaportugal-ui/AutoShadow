@@ -20,13 +20,12 @@ jobs:
     - name: Setup Android NDK
       uses: android-actions/setup-android@v3
 
+    - name: Fix NDK Path and Properties
+      run: |
+        echo "ndk.dir=$ANDROID_NDK_ROOT" >> local.properties
+        chmod +x gradlew
+
     - name: Build Native Binary (C++)
       run: |
-        chmod +x gradlew
-        ./gradlew assembleDebug
-
-    - name: Upload AutoShadow Binary
-      uses: actions/upload-artifact@v4
-      with:
-        name: AutoShadow-Module
-        path: app/build/outputs/apk/debug/*.apk
+        ./gradlew assembleDebug --no-daemon --stacktrace
+        
